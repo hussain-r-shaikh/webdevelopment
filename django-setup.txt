@@ -1,0 +1,250 @@
+================================================================================
+                    DJANGO SETUP NOTES - Windows 11 (C:\ Drive)
+          Python 3.12 + venv + Django Project + App + Settings Configuration
+================================================================================
+
+All commands are for Windows 11 (Command Prompt or PowerShell).
+Project will be created directly under C:\ (example path: C:\myproject)
+
+
+--------------------------------------------------------------------------------
+1. PYTHON
+--------------------------------------------------------------------------------
+# INSTALL PYTHON 3.12
+
+1.1  Go to the official Python website:
+     https://www.python.org/downloads/windows/
+
+1.2  Download the latest Python 3.12.x Windows installer (64-bit).
+
+1.3  Run the installer.
+     IMPORTANT:
+     - Check the box "Add python.exe to PATH"
+     - Click "Install Now"
+
+1.4  After installation, open a new Command Prompt or PowerShell and verify:
+
+     python --version
+     (Should show something like: Python 3.12.x)
+
+     py -3.12 --version
+     (Alternative way using the Python launcher)
+
+1.5  Upgrade pip (recommended):
+     python -m pip install --upgrade pip
+
+
+
+--------------------------------------------------------------------------------
+2. PROJECT
+--------------------------------------------------------------------------------
+# CREATE PROJECT FOLDER ON C:\ DRIVE
+
+2.1  Open Command Prompt or PowerShell.(cmd or PS)
+
+2.2  Go to C:\ drive:
+     cd C:\
+
+2.3  Create a folder for your project (choose any name, example: myproject):
+
+     mkdir myproject
+     cd myproject
+
+
+
+--------------------------------------------------------------------------------
+3. CREATE AND ACTIVATE VIRTUAL ENVIRONMENT (venv)
+--------------------------------------------------------------------------------
+
+3.1  Create the virtual environment (named .venv):
+     
+     python -m venv .venv
+
+3.2  Activate the virtual environment:
+
+     For Command Prompt (cmd):
+     .venv\Scripts\activate.bat
+
+     
+     For PowerShell:
+     .venv\Scripts\Activate.ps1
+
+     (If PowerShell gives an execution policy error, run this once as Administrator:
+      Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser)
+      
+      For Linux/MacOS:
+      source .venv/bin/activate
+
+3.3  After activation you should see (.venv) at the beginning of the prompt.
+     (.venv) C:\myproject>
+
+
+
+--------------------------------------------------------------------------------
+4. Django
+--------------------------------------------------------------------------------
+# INSTALL DJANGO AND REQUIRED PACKAGES
+
+4.1  Install Django (latest stable version):
+
+     python -m pip install django
+
+
+
+--------------------------------------------------------------------------------
+5. CREATE DJANGO PROJECT
+--------------------------------------------------------------------------------
+
+5.1  Make sure you are still inside C:\myproject and the .venv is activated.
+
+5.2  Create the Django project (example name: config):
+
+     django-admin startproject config .
+
+     (The dot at the end is important – it creates the project in the current folder)
+
+5.3  Your folder structure should now look something like this:
+
+     C:\myproject\
+     ├── .venv\
+     ├── config\
+     │   ├── __init__.py
+     │   ├── settings.py
+     │   ├── urls.py
+     │   ├── asgi.py
+     │   └── wsgi.py
+     └── manage.py
+
+
+
+--------------------------------------------------------------------------------
+6. CREATE DJANGO APP
+--------------------------------------------------------------------------------
+
+6.1  Create an app (example name: core or blog or whatever name you like):
+
+     python manage.py startapp core
+
+
+--------------------------------------------------------------------------------
+7. SETTINGS
+--------------------------------------------------------------------------------
+# EDIT settings.py – TEMPLATES, STATIC, MEDIA
+
+Open: C:\myproject\config\settings.py
+
+7.1  Make sure BASE_DIR is defined (it already is by default):
+
+     from pathlib import Path
+     BASE_DIR = Path(__file__).resolve().parent.parent
+
+7.2  TEMPLATES configuration
+
+     Find the TEMPLATES list and update the DIRS setting so Django looks for
+     a global templates folder:
+     
+     INSTALLED_APPS = [
+         'django.contrib.admin',
+         'django.contrib.auth',
+         'django.contrib.contenttypes',
+         'django.contrib.sessions',
+         'django.contrib.messages',
+         'django.contrib.staticfiles',
+         'core',          # <-- Add app
+     ]
+
+     TEMPLATES = [
+         {
+             'BACKEND': 'django.template.backends.django.DjangoTemplates',
+             'DIRS': [BASE_DIR / 'templates'],          # <-- Add templates
+             'APP_DIRS': True,
+             'OPTIONS': {
+                 'context_processors': [
+                     'django.template.context_processors.debug',
+                     'django.template.context_processors.request',
+                     'django.contrib.auth.context_processors.auth',
+                     'django.contrib.messages.context_processors.messages',
+                 ],
+             },
+         },
+     ]
+
+7.3  Create the templates folder:
+
+     mkdir templates
+
+7.4  STATIC files configuration
+
+     Add / update these lines (usually near the bottom of settings.py):
+
+     STATIC_URL = 'static/'
+     STATIC_ROOT = BASE_DIR / 'staticfiles'          # for collectstatic (production)
+     STATICFILES_DIRS = [BASE_DIR / 'static',]       # your project-level static folder
+
+7.5  Create the static folder:
+
+     mkdir static
+
+7.6  MEDIA files configuration (for user-uploaded files)
+
+     Add these lines:
+
+     MEDIA_URL = 'media/'
+     MEDIA_ROOT = BASE_DIR / 'media'
+
+7.7  Create the media folder:
+
+     mkdir media
+
+
+
+--------------------------------------------------------------------------------
+8. SERVE STATIC AND MEDIA FILES IN DEVELOPMENT (urls.py)
+--------------------------------------------------------------------------------
+
+Open: C:\myproject\config\urls.py
+
+Add these imports and the last lines:
+
+
+from django.contrib import admin
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('',include('core.urls')),
+]
+
+# Add static and media URLS if in development.
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+--------------------------------------------------------------------------------
+9. RUN PROJECT COMMANDS
+--------------------------------------------------------------------------------
+
+9.1  Make sure .venv is activated.
+
+9.2  Run Database migrations:
+
+      python manage.py makemigrations
+      python manage.py migrate
+
+9.3  Create a superuser (optional):
+
+      python manage.py createsuperuser
+
+9.4  Run the development server:
+
+      python manage.py runserver
+
+      Then open browser: http://127.0.0.1:8000/
+
+
+
+--------------------------------------------------------------------------------

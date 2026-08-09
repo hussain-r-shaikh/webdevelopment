@@ -1,0 +1,92 @@
+--------------------------------------------------------------------------------
+USEFUL COMMANDS
+--------------------------------------------------------------------------------
+
+# Virtual Environment: 
+----------------------
+
+# Activate virtual environment (from project folder)
+.venv\Scripts\activate          (cmd)
+.venv\Scripts\Activate.ps1      (PowerShell)
+source .venv/bin/activate       (linux, mac)
+
+# Deactivate the virtual environment.
+deactivate
+
+--------------------------------------------------------------------------------
+
+# Pip Commands: 
+---------------
+
+# Install a package
+pip install Django			
+
+# Install all required packages.
+pip install -r requirements.txt		
+
+# Freeze requirements
+pip freeze > requirements.txt
+
+# List all pip packages
+pip list
+
+--------------------------------------------------------------------------------
+
+# Create Django project
+django-admin startproject config .
+
+# Create new django app
+python manage.py startapp core
+
+# Make & apply Database migrations
+python manage.py makemigrations
+python manage.py migrate
+
+# Create Superuser
+python manage.py createsuperuser
+
+# Run server
+python manage.py runserver
+
+# Django shell
+python manage.py shell
+
+# Django staticfiles
+python manage.py collectstatic
+
+
+--------------------------------------------------------------------------------
+12. RECOMMENDED FOLDER STRUCTURE AFTER PROJECT SETUP
+--------------------------------------------------------------------------------
+
+C:\myproject\
+├── .venv\
+├── config\
+│   ├── settings.py
+│   ├── urls.py
+│   ├── asgi.py
+|   └── wsgi.py
+|
+├── core\
+│   ├── migrations\
+│   │   └── __init__.py
+│   │
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── tests.py
+│   └── views.py
+|
+├── templates\             (global templates)
+├── static\                (project static files)
+├── media\                 (user uploaded files)
+├── staticfiles\           (created by collectstatic)
+|
+├── manage.py
+└── requirements.txt
+
+
+================================================================================
+                              END OF NOTES
+================================================================================
