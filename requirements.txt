@@ -1,9 +1,10 @@
 Django
 django-bootstrap5
 django-crispy-forms
+crispy-bootstrap5
 django-import-export
 django-tinymce
 djangorestframework
 pillow
-psycopg[binary]
+
 
