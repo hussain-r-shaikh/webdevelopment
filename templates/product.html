@@ -1,0 +1,166 @@
+{% extends 'website/base.html' %}
+
+{% block title %}Detail{% endblock %}
+
+{% block content %}
+  <!-- ==================== PRODUCT DETAIL ==================== -->
+  <div class="container pb-4">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-custom">
+        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">Mobiles</a></li>
+        <li class="breadcrumb-item active" aria-current="page">iPhone X Pro 5G</li>
+      </ol>
+    </nav>
+
+    <div class="product-hero">
+      <!-- Large Product Image -->
+      <div class="product-image-wrapper">
+        <span class="discount-badge-large">-18% OFF</span>
+        <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=900&q=85" 
+             alt="iPhoneX Pro 5G" 
+             class="img-fluid">
+      </div>
+
+      <!-- Product Content -->
+      <div class="product-content">
+        <div class="product-id">Product ID: SPX-AXP5G-256GB-BLK</div>
+        
+        <h1 class="product-title">iPhoneX Pro 5G</h1>
+
+        <div class="rating-row">
+          <div class="stars">
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-half"></i>
+          </div>
+          <span class="rating-text">4.6 (2,847 ratings) • 1.2k+ bought in past month</span>
+        </div>
+
+        <div class="price-block">
+          <span class="current-price">₹42,999</span>
+          <span class="original-price">₹52,499</span>
+          <span class="save-badge">You save ₹9,500</span>
+        </div>
+
+        <p class="product-description">
+          The all new iphone is the fastest Apple phone ever built by Apple Inc. Designed and developed in Cupertino,USA 
+          and manufactured by Foxconn China, this phone has an Durable Metal and Glass body,stunning XDR Display, 
+          excellent processing power and high definition Camera setup, that can give your digital life a luxurious experience.
+          The top iPhone is back this year with an even larger screen, more powerful hardware, larger battery and faster charging. 
+          Meet the Apple iPhone 16 Pro Max - the best iPhone Apple has produced yet and the iPhone to get if you are after a 
+          maxed-out feature set. The year, the iPhone X Pros are enjoying their first screen enlargement since the iPhone 12 series 
+          and it has worked out really well for them. The small Pro now makes even more sense, while the large Pro Max with its 
+          6.9-inch Super Retina XDR OLED screen is a multimedia consumption monster. And the best part is that the screen increase 
+          came mainly from trimming the bezels - the 16 Pro Max is a mere 1mm wider than the X Pro Max.
+          <br>
+          Experience flagship performance with the iPhone X Pro 5G. Featuring a stunning 6.7-inch AMOLED display 
+          with 120Hz refresh rate, a powerful Snapdragon 8 Gen 2 processor, and a versatile 108MP triple camera 
+          system that captures every detail. The massive 5000mAh battery with 65W fast charging keeps you powered 
+          throughout the day. Built with premium materials and IP68 water resistance for everyday durability.
+        </p>
+
+        <ul class="specs-list">
+          <li><i class="bi bi-check-circle-fill"></i> 6.7" AMOLED Display, 120Hz, HDR10+</li>
+          <li><i class="bi bi-check-circle-fill"></i> Snapdragon 8 Gen 2 • 12GB RAM • 256GB Storage</li>
+          <li><i class="bi bi-check-circle-fill"></i> 108MP + 12MP + 10MP Triple Camera + 32MP Front</li>
+          <li><i class="bi bi-check-circle-fill"></i> 5000mAh Battery with 65W Super Fast Charging</li>
+          <li><i class="bi bi-check-circle-fill"></i> IP68 Dust & Water Resistant • In-display Fingerprint</li>
+        </ul>
+
+        <!-- Quantity Selector -->
+        <div class="d-flex align-items-center gap-3 mb-1">
+          <span class="fw-semibold" style="font-size: 0.95rem;">Quantity:</span>
+          <div class="qty-control">
+            <button class="qty-btn" id="qtyMinus">−</button>
+            <input type="text" class="qty-value" id="qtyValue" value="1" readonly>
+            <button class="qty-btn" id="qtyPlus">+</button>
+          </div>
+        </div>
+
+        <!-- Cart & Buy Now Buttons -->
+        <div class="action-buttons mt-3">
+          
+          <button class="btn btn-cart" id="addToCart">
+            <a href="cart.html">
+            <i class="bi bi-cart-plus"></i> Add to Cart
+            </a>
+          </button>
+          <button class="btn btn-buy" id="buyNow">
+             <a href="cart.html">
+            <i class="bi bi-lightning-charge-fill"></i> Buy Now
+            </a>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+  
+{% block extra_js %}
+  <script>
+    $(document).ready(function () {
+      // Theme Switcher (Green ↔ Blue)
+      const html = document.documentElement;
+      const toggleBtn = document.getElementById('themeToggle');
+      const savedTheme = localStorage.getItem('shopease-theme') || 'green';
+
+      html.setAttribute('data-theme', savedTheme);
+      updateToggleIcon(savedTheme);
+
+      toggleBtn.addEventListener('click', function () {
+        const current = html.getAttribute('data-theme');
+        const next = current === 'green' ? 'blue' : 'green';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('shopease-theme', next);
+        updateToggleIcon(next);
+      });
+
+      function updateToggleIcon(theme) {
+        const icon = toggleBtn.querySelector('i');
+        if (theme === 'green') {
+          icon.className = 'bi bi-droplet-fill';
+          toggleBtn.title = 'Switch to Blue Theme';
+        } else {
+          icon.className = 'bi bi-tree-fill';
+          toggleBtn.title = 'Switch to Green Theme';
+        }
+      }
+
+      // Quantity controls
+      let qty = 1;
+      $('#qtyPlus').on('click', function () {
+        if (qty < 10) {
+          qty++;
+          $('#qtyValue').val(qty);
+        }
+      });
+      $('#qtyMinus').on('click', function () {
+        if (qty > 1) {
+          qty--;
+          $('#qtyValue').val(qty);
+        }
+      });
+
+      // Button feedback
+      $('#addToCart').on('click', function () {
+        const btn = $(this);
+        btn.html('<i class="bi bi-check2"></i> Added to Cart');
+        btn.css({'background': 'var(--accent)', 'color': '#fff'});
+        setTimeout(() => {
+          btn.html('<i class="bi bi-cart-plus"></i> Add to Cart');
+          btn.css({'background': 'transparent', 'color': ''});
+        }, 2000);
+      });
+
+      $('#buyNow').on('click', function () {
+        alert('Proceeding to checkout for iPhoneX Pro 5G (Qty: ' + qty + ')');
+      });
+    });
+  </script>
+{% endblock %}
+
