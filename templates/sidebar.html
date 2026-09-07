@@ -1,0 +1,73 @@
+{% block sidebar %}
+
+
+<div class="sidebar-wrapper">
+    <!-- Newsletter -->
+    <div class="sidebar-card newsletter-card">
+
+        <h4>Stay in the loop</h4>
+
+        <p>
+            Get our newest stories, ideas and useful
+            tech insights delivered straight to you.
+        </p>
+
+        <a href="#" class="newsletter-btn">
+            Subscribe →
+        </a>
+
+    </div>
+
+
+    <!-- About -->
+    <div class="sidebar-card">
+
+        <h4>About BlogApp</h4>
+
+        <p>
+            Welcome to BlogApp — a place for thoughtful
+            articles, practical technology guides and
+            ideas worth sharing.
+        </p>
+
+        <a href="#" class="read-more">
+            Learn more
+            <span>→</span>
+        </a>
+
+    </div>
+
+
+    <!-- Topics -->
+    <div class="sidebar-card">
+
+        <h4>Categories</h4>
+
+        <ul>
+            {% for category in categories %}
+            <li><a href="{% url 'blog:post_category' category.pk %}">{{category.get_category_display}}</a></li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+</div>
+
+     
+
+
+{% endblock sidebar %}
+
+
+    <!-- Sidebar Widgets Column -->
+    <!-- <div class="col-md-4 float-right ">
+        <div class="card my-4">
+            <h5 class="card-header">Blog App</h5>
+            <div class="card-body">
+                <p class="card-text"> This is Technology resource platform that feeds latest and greatest happening in technology and AI, around the world.
+                    We create curated information content with indepth technical details and knowledge, with global research and corporate endorsement. 
+                    </p>
+                <a href="/" class="btn btn-danger">Home</a>
+            </div>
+        </div>
+    </div> -->

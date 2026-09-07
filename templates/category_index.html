@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if post_list %}
+
+<!-- =====================================================
+     FEATURED HERO
+     ===================================================== -->
+
+<header class="masthead">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-xl-9">
+
+                <div class="site-heading">
+
+                    <div class="hero-eyebrow">
+                        ✦ Featured story
+                    </div>
+
+                    <h1>
+                        {{ post_list.0.title }}
+                    </h1>
+
+                    <p>
+                        {{ post_list.0.content|striptags|truncatewords:30 }}
+                    </p>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<!-- =====================================================
+     MAIN CONTENT
+     ===================================================== -->
+
+<div class="container content-area">
+
+    <div class="row">
+
+        <!-- =================================================
+             ARTICLES
+             ================================================= -->
+
+        <main class="col-lg-8">
+
+            <div class="section-label">
+                <h2>Latest Stories</h2>
+                <span>Fresh from the blog</span>
+            </div>
+
+            {% for post in post_list %}
+
+                <article class="blog-card">
+
+                    <div class="blog-card-body">
+
+                        <span class="blog-category">
+                            {{post.category.get_category_display}}
+                        </span>
+
+                        <h3>
+                            <a href="{% url 'blog:post_detail' post.slug %}">
+                                {{ post.title }}
+                            </a>
+                        </h3>
+
+                        <div class="post-meta">
+                            <span>{{ post.author }}</span>
+                            <span class="dot">•</span>
+                            <span>{{ post.created_on|date:"M d, Y" }}</span>
+                        </div>
+
+                        <div class="blog-excerpt">
+                            {{ post.content|striptags|truncatewords:55 }}
+                        </div>
+
+                        <a
+                            href="{% url 'blog:post_detail' post.slug %}"
+                            class="read-more"
+                        >
+                            Read article
+                            <span>→</span>
+                        </a>
+
+                    </div>
+
+                </article>
+
+            {% empty %}
+
+                <div class="blog-card">
+                    <div class="blog-card-body">
+                        <h3>No articles yet.</h3>
+                        <p class="blog-excerpt">
+                            Check back soon for new stories.
+                        </p>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </main>
+
+
+        <!-- =================================================
+        SIDEBAR
+        ================================================= -->
+        <aside class="col-lg-4">
+            {% block sidebar %}
+                {% include 'sidebar.html' %}
+            {% endblock sidebar %}
+        </aside>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     PAGINATION
+     ===================================================== -->
+
+{% if is_paginated %}
+
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a
+                    href="?page={{ page_obj.previous_page_number }}"
+                    class="page-link"
+                >
+                    ← Previous
+                </a>
+            </li>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a
+                    href="?page={{ page_obj.next_page_number }}"
+                    class="page-link"
+                >
+                    Next →
+                </a>
+            </li>
+        {% endif %}
+
+    </ul>
+</nav>
+
+{% endif %}
+
+{% else %}
+
+<!-- Empty state -->
+
+<div class="container py-5">
+    <div class="blog-card">
+        <div class="blog-card-body text-center">
+            <h3>Welcome to BlogApp</h3>
+            <p class="blog-excerpt">
+                Your first article will appear here.
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}
+
