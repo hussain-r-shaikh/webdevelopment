@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+
+{% block title %}
+Order #{{ order.id }}
+{% endblock %}
+
+{% block content %}
+<div class="section-container">
+    <!-- Order Header -->
+    <div class="section-heading">
+        <div>
+            <span class="section-label">
+                Order Details
+            </span>
+            <h2>
+                Order #{{ order.id }}
+            </h2>
+            <p class="text-muted mb-0">
+                Placed on {{ order.created_at|date:"d M Y, h:i A" }}
+            </p>
+        </div>
+        <div class="text-end">
+            <h5>
+                Total: ₹{{ order.total_amount }}
+            </h5>
+            {% if order.payment_successful %}
+                <span class="badge bg-success">
+                    Payment Successful
+                </span>
+            {% endif %}
+        </div>
+    </div>
+
+        <!-- Ordered Products -->
+    <div class="data-card mb-4">
+        <div class="p-4">
+            <h4 class="mb-4">
+                Ordered Products
+            </h4>
+            {% for item in order.items.all %}
+                <div class="
+                    row
+                    align-items-center
+                    border-bottom
+                    py-3
+                ">
+                    <!-- Product Image -->
+                    <div class="col-md-2">
+                        {% if item.product.image %}
+                            <img
+                                src="{{ item.product.image.url }}"
+                                alt="{{ item.product.name }}"
+                                style="
+                                    width: 100px;
+                                    height: 100px;
+                                    object-fit: contain;
+                                "
+                            >
+                        {% else %}
+                            <div
+                                class="bg-light d-flex
+                                       align-items-center
+                                       justify-content-center"
+                                style="
+                                    width: 100px;
+                                    height: 100px;
+                                "
+                            >
+                                No Image
+                            </div>
+                        {% endif %}
+                    </div>
+                    <!-- Product -->
+                    <div class="col-md-4">
+                        <h5>
+                            {{ item.product.name }}
+                        </h5>
+                        <p class="text-muted mb-0">
+                            Quantity: {{ item.quantity }}
+                        </p>
+                    </div>
+                    <!-- Price -->
+                    <div class="col-md-3">
+                        <span class="text-muted">
+                            Price
+                        </span>
+                        <div>
+                            ₹{{ item.price }}
+                        </div>
+                    </div>
+                    <!-- Subtotal -->
+                    <div class="col-md-3 text-md-end">
+                        <span class="text-muted">
+                            Subtotal
+                        </span>
+                        <div>
+                            <strong>
+                                ₹{{ item.subtotal }}
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Delivery Timeline -->
+    <div class="data-card mb-4">
+        <div class="p-4">
+            <h4 class="mb-4">
+                Delivery Status
+            </h4>
+            {% with status=order.delivery_status %}
+            <div class="delivery-timeline">
+                <!-- Confirmed -->
+                <div class="
+                    timeline-item
+                    {% if status == 'Confirmed' or status == 'Processing' or status == 'Shipped' or status == 'Out for Delivery' or status == 'Delivered' %}
+                        completed
+                    {% endif %}
+                ">
+                    <div class="timeline-icon">
+                        ✓
+                    </div>
+                    <div class="timeline-content">
+                        <h5>
+                            Confirmed
+                        </h5>
+                        <p>
+                            Your order has been confirmed.
+                        </p>
+                    </div>
+                </div>
+                <!-- Processing -->
+                <div class="
+                    timeline-item
+                    {% if status == 'Processing' or status == 'Shipped' or status == 'Out for Delivery' or status == 'Delivered' %}
+                        completed
+                    {% endif %}
+                ">
+                    <div class="timeline-icon">
+                        ✓
+                    </div>
+                    <div class="timeline-content">
+                        <h5>
+                            Processing
+                        </h5>
+                        <p>
+                            Your order is being prepared.
+                        </p>
+                    </div>
+                </div>
+                <!-- Shipped -->
+                <div class="
+                    timeline-item
+                    {% if status == 'Shipped' or status == 'Out for Delivery' or status == 'Delivered' %}
+                        completed
+                    {% endif %}
+                ">
+                    <div class="timeline-icon">
+                        ✓
+                    </div>
+                    <div class="timeline-content">
+                        <h5>
+                            Shipped
+                        </h5>
+                        <p>
+                            Your order has been shipped.
+                        </p>
+                    </div>
+                </div>
+                <!-- Out for Delivery -->
+                <div class="
+                    timeline-item
+                    {% if status == 'Out for Delivery' or status == 'Delivered' %}
+                        completed
+                    {% endif %}
+                ">
+                    <div class="timeline-icon">
+                        ✓
+                    </div>
+                    <div class="timeline-content">
+                        <h5>
+                            Out for Delivery
+                        </h5>
+                        <p>
+                            Your order is on the way.
+                        </p>
+                    </div>
+                </div>
+                <!-- Delivered -->
+                <div class="
+                    timeline-item
+                    {% if status == 'Delivered' %}
+                        completed
+                    {% endif %}
+                ">
+                    <div class="timeline-icon">
+                        ✓
+                    </div>
+                    <div class="timeline-content">
+                        <h5>
+                            Delivered
+                        </h5>
+                        <p>
+                            Your order has been delivered.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endwith %}
+        </div>
+    </div>
+    <!-- Current Status -->
+    <div class="data-card mb-4">
+        <div class="p-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <small class="text-muted">
+                        Current Status
+                    </small>
+                    <h4 class="mt-1">
+                        {{ order.delivery_status }}
+                    </h4>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <small class="text-muted">
+                        Payment
+                    </small>
+                    <h5 class="mt-1 text-success">
+                        {% if order.payment_successful %}
+                            Paid
+                        {% else %}
+                            Payment Pending
+                        {% endif %}
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+</div>
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function () {
+    console.log("🚀Cart cleared.");
+    cart.clear();
+});
+    
+</script>
+
+{% endblock %}

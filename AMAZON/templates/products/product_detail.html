@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}
+Products
+{% endblock %}
+{% block content %}
+<div class="container">
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      {% if product.image %}
+      <div class="col-md-4 mb-3">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded">
+      </div>
+      {% endif %}
+      <div class="{% if product.image %}col-md-8{% else %}col-12{% endif %}">
+        <dl class="row mb-0">
+          <dt class="col-sm-2">Title:</dt>
+          <dd class="col-sm-10">{{ product.name }}</dd>
+          <dt class="col-sm-2">Category:</dt>
+          <dd class="col-sm-10">{{ product.get_category_display }}</dd>
+          <dt class="col-sm-2">Price:</dt>
+          <dd class="col-sm-10">{{ product.price }}</dd>
+          <dt class="col-sm-2">Description:</dt>
+          <p>{{ product.description|linebreaksbr|default:"—" }}</p>
+        </dl>
+        <button
+            type="button"
+            class="btn btn-amazon add-to-cart"
+            data-product-id="{{ product.id }}"
+            data-product-name="{{ product.name }}"
+            data-product-price="{{ product.price }}"
+            data-product-image="{% if product.image %}{{ product.image.url }}{% endif %}"
+        >
+            Add to Cart
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+$(".add-to-cart").click(function () {
+    const product = {
+        product_id: parseInt(
+            $(this).data("product-id")
+        ),
+        name: $(this).data("product-name"),
+        price: $(this).data("product-price"),
+        image: $(this).data("product-image")
+    };
+    cart.add(product);
+    const button = $(this);
+    button.text("Added ✓");
+    setTimeout(
+        () => button.text("Add to Cart"),
+        1000
+    );
+});
+</script>
+{% endblock %}

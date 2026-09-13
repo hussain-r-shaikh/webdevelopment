@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}
+Your Cart
+{% endblock %}
+{% block content %}
+<div class="section-container">
+    <div class="section-heading">
+        <div>
+            <span class="section-label">
+                Shopping
+            </span>
+            <h2>
+                Your Cart
+            </h2>
+        </div>
+    </div>
+    <div id="cart-items">
+    </div>
+    <div class="data-card mt-4">
+        <div class="p-4">
+            <h4>
+                Total:
+                ₹<span id="cart-total">0.00</span>
+            </h4>
+            <button
+                id="checkout-button"
+                class="btn btn-amazon mt-3"
+            >
+                Proceed to Checkout
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+function renderCart() {
+    $("#cart-items").empty();
+    if (cart.items.length === 0) {
+        $("#cart-items").html(`
+            <div class="empty-state">
+                <div>🛒</div>
+                <h4>Your cart is empty</h4>
+                <p>
+                    Add some products to continue.
+                </p>
+            </div>
+        `);
+        $("#cart-total").text("0.00");
+        return;
+    }
+    cart.items.forEach(function (item) {
+        $("#cart-items").append(`
+            <div class="data-card mb-3">
+                <div class="p-3">
+                    <div class="row align-items-center">
+                        <div class="col-md-1">
+                            <img
+                                src="${item.image}"
+                                alt="${item.name}"
+                                style="
+                                    width: 100px;
+                                    height: 100px;
+                                    object-fit: contain;
+                                "
+                            >
+                        </div>
+                        <div class="col-md-8">
+                            <h5>
+                                ${item.name}
+                            </h5>
+                            <strong>
+                                ₹${item.price}
+                            </strong>
+                        </div>
+                        <div class="col-md-1 text-end">
+                            <h5>
+                                Qty: 
+                            </h5>
+                        </div>
+                        <div class="col-md-1">
+                            <input
+                                type="number"
+                                min="1"
+                                value="${item.quantity}"
+                                class="form-control quantity"
+                                data-id="${item.product_id}"
+                            >
+                        </div>
+                        <div class="col-md-1 text-end">
+                            <button
+                                class="btn btn-danger remove-item"
+                                data-id="${item.product_id}"
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+    });
+    $("#cart-total").text(
+        cart.total().toFixed(2)
+    );
+}
+$(document).ready(function () {
+    renderCart();
+    $(document).on(
+        "change",
+        ".quantity",
+        function () {
+            const productId =
+                parseInt(
+                    $(this).data("id")
+                );
+            const quantity =
+                parseInt(
+                    $(this).val()
+                );
+            cart.update(
+                productId,
+                quantity
+            );
+            renderCart();
+        }
+    );
+    $(document).on(
+        "click",
+        ".remove-item",
+        function () {
+            const productId =
+                parseInt(
+                    $(this).data("id")
+                );
+            cart.remove(
+                productId
+            );
+            renderCart();
+        }
+    );
+    $("#checkout-button").click(
+        function () {
+            cart.checkout();
+        }
+    );
+});
+</script>
+{% endblock %}
