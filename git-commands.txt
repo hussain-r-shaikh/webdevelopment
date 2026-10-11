@@ -1,0 +1,44 @@
+Git:
+The explanation of git with analogy of  Railway Network. 
+Branch = Track
+Head = Engine
+code = bogeys
+commits = Station
+
+
+git init .
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+
+git init .
+git add . 
+git commit -m "First commit."
+git branch -M main
+git remote add origin https://github.com/your-username/my-project.git
+git push -u origin main
+
+Important: Do NOT check the boxes for "Add a README file", "Add .gitignore", or "Choose a license". Your local project already has its own files, and keeping the remote repo completely empty prevents merge conflicts.
+
+
+git remote -v  # check origin.
+
+
+
+git branch B1
+git checkout B1
+
+git merge B1
+git diff
+
+# Merge operation.
+git checkout --ours file.txt
+git checkout --theirs file.txt
+git add .
+git commit -m "conflict resolved and branch B1 merged."
+
+# Rebase
+git rebase trunk
+
+
+
+
